@@ -1,0 +1,7 @@
+Summary of What You Did
+
+Initialized a Git repo locally
+Created folder structure (frontend, backend, docs)
+Added README.md, .gitignore, LICENSE
+Pushed everything to GitHub main branch
+Created develop branch for ongoing work
