@@ -1,0 +1,24 @@
+Story 2 — Backend Framework Setup
+Epic: epic-1 backend | Priority: High | Points: 2
+I initialized the backend of the AI Code Mentor project using Express.js and Node.js. I navigated to the backend folder and ran npm init -y to create the package.json file. Then I installed the required dependencies including express for the web framework, dotenv for environment variable management, cors for allowing the frontend to communicate with the backend, and nodemon as a dev dependency for auto-restarting the server during development.
+I then created the required folder structure inside the backend including /routes, /controllers, /services, and /middleware folders. I created the main app.js file with Express server configuration, CORS setup for localhost:3000, and a health check endpoint at GET /health that returns { status: ok }. I also created .env and .env.example files for environment variable management and updated the package.json scripts to support npm run dev using nodemon.
+After testing the server successfully in the browser at http://localhost:5000/health and confirming it returned { "status": "ok" }, I committed all changes and pushed to the develop branch on GitHub.
+What I learned:
+
+How to initialize a Node.js project with npm
+How to set up Express.js with CORS and dotenv
+How to create and test a health check endpoint
+How to manage environment variables with .env files
+How to commit and push to a specific branch on GitHub
+
+
+🔢 Sprint 1 Progress
+StoryDescriptionPointsStatusStory 1GitHub Repo Setup1✅ DoneStory 2Backend Framework Setup2✅ DoneStory 3TBD-🔲 Pending
+
+🛠️ Tools & Technologies Used
+
+Git & GitHub
+Node.js & Express.js
+dotenv, cors, nodemon
+VS Code
+Git Bash & PowerShell

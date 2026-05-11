@@ -1,0 +1,11 @@
+Day 1 Summary
+Story 1 — GitHub Repository Setup
+Epic: epic-1 setup | Priority: High | Points: 1
+I started the project by setting up the GitHub repository for the AI Code Mentor project. First I created a local project folder on my desktop and initialized Git inside it. Then I created the required folder structure including frontend, backend, and docs directories with placeholder .gitkeep files so Git could track the empty folders.
+After that I created all the required project files including README.md with the project title, description, and tech stack, a .gitignore file covering Node.js, Python, and environment files, and an MIT LICENSE file. I then created the GitHub repository at github.com/marizwan226/ai-code-mentor and connected my local repo to it. After resolving a remote conflict I successfully pushed the initial commit to the main branch and created a separate develop branch for ongoing development work.
+What I learned:
+
+How to initialize a Git repository locally
+How to connect local repo to GitHub remote
+How to resolve push conflicts using --allow-unrelated-histories
+Difference between main and develop branches
