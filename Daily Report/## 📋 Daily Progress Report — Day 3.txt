@@ -1,0 +1,62 @@
+## 📋 Daily Progress Report — Day 3
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 3
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 3 — Frontend Framework Setup
+**Epic:** epic-1 frontend | **Priority:** High | **Points:** 2 | **Estimate:** 0.5 day
+
+---
+
+### What I Did
+
+Today I initialized the frontend of the AI Code Mentor project using Next.js with TypeScript and Tailwind CSS. I navigated to the frontend folder and ran `npx create-next-app` with TypeScript, Tailwind CSS, ESLint, and App Router configuration.
+
+After setting up the project I created a reusable `Layout.tsx` component inside the `components` folder which includes a navigation bar with links to all pages and a main content wrapper styled with Tailwind CSS.
+
+I then created four placeholder pages for the application:
+- **Home** (`/`) — Welcome page with project title and description
+- **Chat** (`/chat`) — Placeholder for AI chat feature
+- **Review** (`/review`) — Placeholder for code review feature
+- **History** (`/history`) — Placeholder for history feature
+
+I tested the application locally on `http://localhost:3000` and confirmed all four pages load correctly with the navigation bar working. Finally I committed all changes and pushed to the `develop` branch on GitHub.
+
+---
+
+### What I Learned
+- How to initialize a Next.js project with TypeScript
+- How to configure and use Tailwind CSS for styling
+- How to create reusable layout components in React
+- How to set up routing using Next.js App Router
+- How to structure a frontend project properly
+
+---
+
+## 🏆 Overall Sprint 1 Summary
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 1 | GitHub Repo Setup | 1 | ✅ Done |
+| Story 2 | Backend Framework Setup | 2 | ✅ Done |
+| Story 3 | Frontend Framework Setup | 2 | ✅ Done |
+
+**Total Points Completed: 5/5** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- Next.js 15 with App Router
+- TypeScript
+- Tailwind CSS
+- React Components
+- Git & GitHub
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
