@@ -1,0 +1,82 @@
+## 📋 Daily Progress Report — Day 4
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 4
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 4 — User Authentication (Signup & Login)
+**Epic:** epic-1 auth | **Priority:** High | **Points:** 3 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I implemented a complete JWT-based authentication system for the AI Code Mentor backend. I started by installing the required packages including `bcryptjs` for password hashing, `jsonwebtoken` for creating and verifying JWT tokens, and `mongoose` for database modeling.
+
+I then created the full authentication folder structure inside the backend:
+
+**User Model** — I created a `User.js` model inside the `models` folder using Mongoose schema with email and password fields. The email is stored in lowercase and must be unique, and timestamps are automatically added to every user record.
+
+**Auth Controller** — I created `authController.js` inside the `controllers` folder with two main functions. The signup function checks if a user already exists, hashes the password using bcrypt with a salt round of 12, creates a new user in the database, and returns a JWT token. The login function finds the user by email, compares the provided password with the hashed password using bcrypt, and returns a JWT token on success.
+
+**Auth Middleware** — I created `authMiddleware.js` inside the `middleware` folder which extracts the JWT token from the request headers, verifies it using the JWT secret, and either allows the request to continue or returns a 401 error if the token is missing or invalid.
+
+**Auth Routes** — I created `auth.js` inside the `routes` folder with three routes: `POST /auth/signup`, `POST /auth/login`, and `GET /auth/protected` which is a test route protected by the auth middleware.
+
+I also faced a MongoDB Atlas connection issue due to network/DNS restrictions. I resolved it by switching to **MongoDB Memory Server** which runs MongoDB locally inside Node.js without needing an internet connection or installation.
+
+I tested all routes using PowerShell and confirmed:
+- Signup creates a user and returns a JWT token
+- Login verifies credentials and returns a JWT token
+- Protected route returns `401 Authentication required` without a valid token
+
+Finally I committed all changes and pushed to the `develop` branch on GitHub.
+
+---
+
+### Challenges Faced & How I Solved Them
+| Challenge | Solution |
+|---|---|
+| MongoDB Atlas DNS connection error | Switched to MongoDB Memory Server |
+| `rs` command not found | Restarted nodemon with `npm run dev` |
+| curl not working in Git Bash | Used PowerShell `Invoke-RestMethod` instead |
+
+---
+
+### What I Learned
+- How JWT authentication works end to end
+- How to hash passwords securely with bcrypt
+- How to create and verify JWT tokens
+- How to write auth middleware to protect routes
+- How to use MongoDB Memory Server as a local database
+- How to test API routes using PowerShell
+
+---
+
+## 🏆 Overall Sprint 1 Summary
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 1 | GitHub Repo Setup | 1 | ✅ Done |
+| Story 2 | Backend Framework Setup | 2 | ✅ Done |
+| Story 3 | Frontend Framework Setup | 2 | ✅ Done |
+| Story 4 | User Authentication | 3 | ✅ Done |
+
+**Total Points Completed: 8/8** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- bcryptjs — password hashing
+- jsonwebtoken — JWT creation & verification
+- mongoose — MongoDB object modeling
+- MongoDB Memory Server — local in-memory database
+- PowerShell — API testing
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

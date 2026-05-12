@@ -1,5 +1,6 @@
-<<<<<<< HEAD
 # AI Code Mentor
+
+[![CI Pipeline](https://github.com/marizwan226/ai-code-mentor/actions/workflows/ci.yml/badge.svg)](https://github.com/marizwan226/ai-code-mentor/actions/workflows/ci.yml)
 
 An AI-powered platform that helps developers learn, review, and improve their code through intelligent feedback and mentorship.
 
@@ -16,7 +17,3 @@ An AI-powered platform that helps developers learn, review, and improve their co
 
 ## Getting Started
 Coming soon...
-=======
-# AI-Code-Mentor
-AI-powered code mentor that reviews your code, answers technical questions, and gives feedback like a senior developer. Built with React, .NET, and Claude AI.
->>>>>>> 99683a72367939466956d0a87522c4190c2c1cb9
