@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,10 +14,10 @@ export default function Layout({ children }: LayoutProps) {
             AI Code Mentor
           </h1>
           <div className="flex gap-6">
-            <a href="/" className="text-gray-600 hover:text-indigo-600">Home</a>
-            <a href="/chat" className="text-gray-600 hover:text-indigo-600">Chat</a>
-            <a href="/review" className="text-gray-600 hover:text-indigo-600">Review</a>
-            <a href="/history" className="text-gray-600 hover:text-indigo-600">History</a>
+            <Link href="/" className="text-gray-600 hover:text-indigo-600">Home</Link>
+            <Link href="/chat" className="text-gray-600 hover:text-indigo-600">Chat</Link>
+            <Link href="/review" className="text-gray-600 hover:text-indigo-600">Review</Link>
+            <Link href="/history" className="text-gray-600 hover:text-indigo-600">History</Link>
           </div>
         </div>
       </nav>
