@@ -1,0 +1,31 @@
+Everything is already committed and pushed! ✅
+
+---
+
+## Story 7 Status
+
+```
+✅ System prompt written (v2.0)
+✅ Persona defined — senior developer, direct, no fluff
+✅ Structured feedback format — What's Wrong → Why → Fix
+✅ System prompt stored in config/systemPrompt.js
+✅ Prompt version documented in docs/prompt-versions.md
+✅ LLM service updated with OpenRouter
+⏳ Live testing with 5 code samples — pending (needs valid API key)
+```
+
+---
+
+## Summary of Stories 6 & 7
+
+Both stories are structurally complete. The only remaining blocker is a working OpenRouter API key to do live testing. Once that works, both stories are fully done.
+
+---
+
+## What to Tell Your Trainer
+
+**Story 6 & 7 are built and committed. The LLM service, chat routes, system prompt, and OpenRouter integration are all in place. Live API testing is pending due to an API key issue — the key will be verified and tested tomorrow.**
+
+---
+
+Ready to move to the next story? Paste the details! 👇
