@@ -17,6 +17,7 @@ app.use(express.json());
 // Routes
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
+
 const chatRoutes = require('./routes/chat');
 app.use('/api/chat', chatRoutes);
 
@@ -27,15 +28,29 @@ app.get('/health', (req, res) => {
 
 // MongoDB Memory Server Connection
 async function startServer() {
-  const mongod = await MongoMemoryServer.create();
-  const uri = mongod.getUri();
-  await mongoose.connect(uri);
-  console.log('MongoDB Memory Server connected');
+  try {
+    const mongod = await MongoMemoryServer.create();
+    const uri = mongod.getUri();
+    await mongoose.connect(uri);
+    console.log('MongoDB Memory Server connected');
 
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+    const PORT = process.env.PORT || 5000;
+    const server = app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+    // Keep process alive
+    process.on('SIGINT', async () => {
+      await mongoose.disconnect();
+      await mongod.stop();
+      server.close();
+      process.exit(0);
+    });
+
+  } catch (error) {
+    console.error('Server startup error:', error);
+    process.exit(1);
+  }
 }
 
 startServer();

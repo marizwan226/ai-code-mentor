@@ -1,0 +1,82 @@
+## 📋 Daily Progress Report — Day 6
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 6
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 6 — LLM API Integration (Anthropic Claude)
+**Epic:** epic-2 ai-core | **Priority:** High | **Points:** 3 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I started Sprint 2 by integrating the Anthropic Claude API into the backend of the AI Code Mentor project. The goal was to make the AI layer functional end-to-end so the backend can send messages to Claude and return responses.
+
+I started by installing the official Anthropic SDK using `npm install @anthropic-ai/sdk` which adds the client library needed to communicate with the Claude API.
+
+**LLM Service** — I created `services/llm.service.js` which is the core AI layer of the application. It contains two functions. The first is `getChatResponse` which sends a messages array to Claude and returns a complete response. The second is `getChatResponseStream` which supports streaming responses using Server-Sent Events (SSE) — this means the AI response streams back word by word in real time, just like ChatGPT, instead of waiting for the full response.
+
+**Chat Route** — I created `routes/chat.js` with two endpoints. `POST /api/chat` handles standard non-streaming requests and returns the full AI response as JSON. `POST /api/chat/stream` handles streaming requests and sends back chunks of the response as they arrive from Claude.
+
+**App Integration** — I updated `app.js` to register the new chat routes under `/api/chat` so they are accessible from the frontend.
+
+**Security** — The Anthropic API key is stored securely in the `.env` file and is listed in `.gitignore` so it is never pushed to GitHub. The `.env.example` file shows the key name without the value so other developers know what keys are needed.
+
+During testing I encountered a 401 authentication error which means the API key needs to be verified. The full live test will be completed once a valid API key is confirmed. All code has been committed and pushed to the `develop` branch.
+
+---
+
+### What Was Built
+
+```
+backend/
+├── services/
+│     └── llm.service.js   ← Claude API calls (normal + streaming)
+└── routes/
+      └── chat.js          ← POST /api/chat and /api/chat/stream
+```
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| 401 authentication error on API call | API key needs to be verified and updated |
+| Keeping .env file secure | Added to .gitignore, never pushed to GitHub |
+| Supporting streaming responses | Used SSE with `res.write()` for chunked output |
+
+---
+
+### What I Learned
+- How to integrate the Anthropic Claude SDK into a Node.js backend
+- How to build streaming API responses using Server-Sent Events
+- How to securely manage API keys using environment variables
+- How to structure an LLM service layer separately from routes
+- Difference between streaming and non-streaming AI responses
+
+---
+
+## 🏆 Sprint 2 Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 6 | LLM API Integration | 3 | ⏳ API key pending |
+
+---
+
+## 🛠️ Technologies Used Today
+- @anthropic-ai/sdk — Anthropic Claude API client
+- Server-Sent Events (SSE) — streaming responses
+- dotenv — secure API key management
+- Express.js — chat route handling
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

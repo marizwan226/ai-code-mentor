@@ -1,14 +1,21 @@
 const Anthropic = require('@anthropic-ai/sdk');
+const { SYSTEM_PROMPT_V2 } = require('../config/systemPrompt');
 
 const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  baseURL: 'https://openrouter.ai/api/v1',
+  defaultHeaders: {
+    'HTTP-Referer': 'http://localhost:3000',
+    'X-Title': 'AI Code Mentor'
+  }
 });
 
 // Non-streaming response
 const getChatResponse = async (messages) => {
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'anthropic/claude-3.5-sonnet',
     max_tokens: 1024,
+    system: SYSTEM_PROMPT_V2,
     messages: messages
   });
 
@@ -22,8 +29,9 @@ const getChatResponseStream = async (messages, res) => {
   res.setHeader('Connection', 'keep-alive');
 
   const stream = await client.messages.stream({
-    model: 'claude-sonnet-4-20250514',
+    model: 'anthropic/claude-3.5-sonnet',
     max_tokens: 1024,
+    system: SYSTEM_PROMPT_V2,
     messages: messages
   });
 
