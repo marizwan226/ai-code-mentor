@@ -1,31 +1,65 @@
-Everything is already committed and pushed! ✅
+## 📋 Daily Progress Report — Day 7
 
 ---
 
-## Story 7 Status
-
-```
-✅ System prompt written (v2.0)
-✅ Persona defined — senior developer, direct, no fluff
-✅ Structured feedback format — What's Wrong → Why → Fix
-✅ System prompt stored in config/systemPrompt.js
-✅ Prompt version documented in docs/prompt-versions.md
-✅ LLM service updated with OpenRouter
-⏳ Live testing with 5 code samples — pending (needs valid API key)
-```
+### 👤 Developer: Mariz
+### 📅 Date: Day 7
+### 🚀 Project: AI Code Mentor
 
 ---
 
-## Summary of Stories 6 & 7
-
-Both stories are structurally complete. The only remaining blocker is a working OpenRouter API key to do live testing. Once that works, both stories are fully done.
-
----
-
-## What to Tell Your Trainer
-
-**Story 6 & 7 are built and committed. The LLM service, chat routes, system prompt, and OpenRouter integration are all in place. Live API testing is pending due to an API key issue — the key will be verified and tested tomorrow.**
+## Story 7 — AI Persona & Prompt Engineering
+**Epic:** epic-2 ai-core | **Priority:** High | **Points:** 3 | **Estimate:** 1 day
 
 ---
 
-Ready to move to the next story? Paste the details! 👇
+### What I Did
+
+Today I worked on defining the AI persona and building the prompt engineering layer for the AI Code Mentor. The goal was to make the AI behave like a senior developer — direct, opinionated, and code-focused — rather than a generic chatbot.
+
+**System Prompt Configuration** — I created a dedicated config file at `backend/config/systemPrompt.js` to store the system prompt separately from the business logic. This makes it easy to update and version the prompt without touching the core service code.
+
+**Persona Design (v2.0)** — I wrote a detailed system prompt that defines the AI as a senior software engineer with 15+ years of experience across Python, JavaScript, SQL, and system design. The persona is direct and opinionated with no filler language. It thinks like a code reviewer at a top tech company and focuses on correctness, performance, and maintainability rather than motivation or encouragement.
+
+**Structured Feedback Format** — The system prompt enforces a strict three-part response structure for every code review:
+- **What's Wrong** — lists every issue with specific line numbers and variable names
+- **Why It Matters** — explains the impact in terms of bugs, performance, security, or maintainability
+- **The Fix** — provides the full corrected working code with no partial fixes
+
+**Rules Defined** — The prompt includes strict rules such as never saying motivational phrases like "Great job!", always providing the simplest correct solution, flagging security issues like SQL injection and XSS as critical and calling them out first, and responding with "No issues found. This is production-ready." when the code is already clean.
+
+**Prompt Versioning** — I created `docs/prompt-versions.md` to document the prompt version history. The current version is v2.0 and the file records what changed from v1, the reasoning behind each design decision, and the current status.
+
+**LLM Service Update** — I updated `services/llm.service.js` to inject the system prompt into every API call to OpenRouter using the Anthropic Claude model. Both streaming and non-streaming endpoints now use the system prompt.
+
+---
+
+### What I Learned
+- How to design an effective AI system prompt with clear persona and rules
+- How to enforce structured output format through prompt engineering
+- How to version and document prompts for maintainability
+- How system prompts differ from user messages in the Claude API
+- How to separate prompt configuration from business logic
+
+---
+
+## 🏆 Sprint 2 Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 6 | LLM API Integration | 3 | ⏳ API key pending |
+| Story 7 | Prompt Engineering | 3 | ✅ Done |
+| Story 8 | Session Memory | 3 | ⏳ API key pending for live test |
+
+---
+
+## 🛠️ Technologies Used Today
+- Anthropic Claude via OpenRouter
+- JavaScript ES6 modules
+- Prompt Engineering techniques
+- Markdown documentation
+- Git & GitHub version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

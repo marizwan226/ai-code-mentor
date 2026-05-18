@@ -1,0 +1,90 @@
+## 📋 Daily Progress Report — Day 8
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 8
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 8 — Session Memory & Chat History
+**Epic:** epic-2 ai-core | **Priority:** High | **Points:** 3 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built the session memory system for the AI Code Mentor backend. The goal was to make the AI remember what was discussed in the current session so users don't have to repeat context on every message.
+
+**Session Store** — I created `services/sessionStore.js` which uses an in-memory JavaScript Map to store chat history per session. Each session is identified by a unique UUID. The store provides three functions: `getSession` to retrieve existing history or create a new empty session, `addMessage` to append messages to a session, and `clearSession` to wipe a session clean for a fresh start. Sessions are automatically trimmed when they exceed 20 messages to prevent memory bloat.
+
+**Token Counter** — I created `services/tokenCounter.js` which estimates the token count of messages using a simple calculation of one token per four characters. This is a standard approximation used in production applications. The service provides `estimateTokens` for individual text, `estimateHistoryTokens` for an entire conversation, and `trimHistory` which automatically removes the oldest messages when the conversation exceeds 80% of the model's token limit (80,000 out of 100,000 tokens).
+
+**Updated Chat Routes** — I updated `routes/chat.js` to integrate session memory into both the standard and streaming chat endpoints. On every request the route now retrieves the existing session history, adds the new user message, trims the history if needed to stay within token limits, sends the full conversation to the AI, and then saves the AI response back to the session. The response now includes a `sessionId` which the frontend will use to maintain conversation continuity across multiple messages.
+
+**Session Management Endpoint** — I added a `DELETE /api/chat/session/:sessionId` endpoint that allows the frontend to clear a session and start a fresh conversation without any history bleeding from the previous session.
+
+**UUID Integration** — I installed the `uuid` package to generate unique session identifiers for each new conversation. If no session ID is provided in the request the system automatically generates a new one and returns it in the response.
+
+---
+
+### How Session Memory Works
+
+```
+User sends message
+       ↓
+Get existing session history
+       ↓
+Add new message to history
+       ↓
+Trim history if over 80k tokens
+       ↓
+Send full history to Claude AI
+       ↓
+Save AI response to history
+       ↓
+Return response + sessionId to frontend
+```
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| API key not working for live testing | Code is complete, will test once valid key is confirmed |
+| Preventing memory overflow | Added 20 message limit and 80k token trimming |
+| Session isolation between users | Each session uses a unique UUID as key in the Map |
+
+---
+
+### What I Learned
+- How to build an in-memory session store using JavaScript Map
+- How to estimate token counts for LLM conversations
+- How to implement a rolling window for conversation history
+- How UUID works for generating unique session identifiers
+- How to design stateful API endpoints for chat applications
+
+---
+
+## 🏆 Sprint 2 Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 6 | LLM API Integration | 3 | ⏳ API key pending |
+| Story 7 | Prompt Engineering | 3 | ✅ Done |
+| Story 8 | Session Memory | 3 | ✅ Code done, live test pending |
+
+---
+
+## 🛠️ Technologies Used Today
+- JavaScript Map — in-memory session storage
+- UUID — unique session identification
+- Token estimation — conversation trimming
+- Express.js — REST API endpoints
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

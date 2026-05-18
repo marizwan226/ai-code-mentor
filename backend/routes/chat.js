@@ -4,6 +4,7 @@ const { getChatResponse, getChatResponseStream } = require('../services/llm.serv
 const { getSession, addMessage, clearSession } = require('../services/sessionStore');
 const { trimHistory } = require('../services/tokenCounter');
 const { v4: uuidv4 } = require('uuid');
+const { detectLanguage, getSupportedLanguages } = require('../services/languageDetector');
 
 // Non-streaming chat with session memory
 router.post('/', async (req, res) => {
@@ -70,6 +71,24 @@ router.delete('/session/:sessionId', (req, res) => {
   const { sessionId } = req.params;
   clearSession(sessionId);
   res.json({ message: 'Session cleared', sessionId });
+});
+// Detect language from code
+router.post('/detect-language', (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code) {
+      return res.status(400).json({ message: 'code is required' });
+    }
+    const result = detectLanguage(code);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: 'Detection failed', error: error.message });
+  }
+});
+
+// Get supported languages
+router.get('/languages', (req, res) => {
+  res.json(getSupportedLanguages());
 });
 
 module.exports = router;

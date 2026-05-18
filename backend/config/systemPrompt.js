@@ -30,5 +30,13 @@ Provide the corrected code. No partial fixes. Show the full working solution.
 Python, JavaScript, TypeScript, SQL, Bash, and any common web technology.`;
 
 const SYSTEM_PROMPT_VERSION = 'v2.0';
+const getSystemPromptWithLanguage = (language = null) => {
+  if (!language || language === 'unknown') {
+    return SYSTEM_PROMPT_V2;
+  }
+  return `${SYSTEM_PROMPT_V2}\n\n## Current Context\nThe user is working in **${language}**. Tailor all examples, fixes, and advice specifically for ${language} conventions and best practices.`;
+};
+
+module.exports = { SYSTEM_PROMPT_V2, SYSTEM_PROMPT_VERSION, getSystemPromptWithLanguage };
 
 module.exports = { SYSTEM_PROMPT_V2, SYSTEM_PROMPT_VERSION };
