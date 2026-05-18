@@ -14,17 +14,28 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Logger
+const logger = require('./middleware/logger');
+app.use(logger);
+
+// Rate Limiters
+const { chatRateLimiter, authRateLimiter } = require('./middleware/rateLimiter');
+
 // Routes
 const authRoutes = require('./routes/auth');
-app.use('/auth', authRoutes);
+app.use('/auth', authRateLimiter, authRoutes);
 
 const chatRoutes = require('./routes/chat');
-app.use('/api/chat', chatRoutes);
+app.use('/api/chat', chatRateLimiter, chatRoutes);
 
 // Health Check Route
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+// Centralized Error Handler
+const errorHandler = require('./middleware/errorHandler');
+app.use(errorHandler);
 
 // MongoDB Memory Server Connection
 async function startServer() {

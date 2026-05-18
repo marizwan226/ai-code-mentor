@@ -1,0 +1,88 @@
+## 📋 Daily Progress Report — Day 9
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 9
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 9 — Language Auto-Detection
+**Epic:** epic-2 ai-core | **Priority:** Medium | **Points:** 2 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built an automatic programming language detection system for the AI Code Mentor. The goal was to make the AI recognize what language the user is writing in and tailor its advice accordingly without the user having to manually specify the language every time.
+
+**Language Detector Service** — I created `services/languageDetector.js` which uses regex pattern matching to identify programming languages from code snippets. Instead of using a heavy external library that requires file system access, I built a lightweight regex-based detector that works directly on code strings in memory. This makes it fast and reliable.
+
+**8 Languages Supported** — The detector supports the following languages with their own set of regex patterns:
+
+| Language | Badge | Key Patterns |
+|---|---|---|
+| Python | 🐍 | def, import, print(), `:` at end of line |
+| JavaScript | 🟨 | const/let/var, arrow functions, console.log |
+| TypeScript | 🔷 | type annotations, interfaces, generics |
+| SQL | 🗄️ | SELECT FROM, INSERT INTO, WHERE, JOIN |
+| Java | ☕ | public class, System.out.println, @Override |
+| Go | 🐹 | func, package, := operator, fmt.Print |
+| Bash | 💻 | shebang line, echo, $variables, chmod |
+| C++ | ⚡ | #include, std::, cout, int main() |
+
+**Confidence Scoring** — The detector assigns a confidence score to each detection based on how many patterns matched out of the total patterns for that language. For example if Python has 7 patterns and 3 matched the confidence is 43%. This helps the UI show how certain the detection is.
+
+**API Endpoints** — I added two new endpoints to the chat routes. `POST /api/chat/detect-language` accepts a code snippet and returns the detected language, name, badge emoji, and confidence score. `GET /api/chat/languages` returns the full list of all supported languages for use in the frontend dropdown.
+
+**System Prompt Integration** — I updated `config/systemPrompt.js` with a new function `getSystemPromptWithLanguage` that appends language-specific context to the system prompt. When a language is detected, the AI is told to tailor all examples, fixes, and advice specifically for that language's conventions and best practices.
+
+**Live Testing Results** — I tested the detector against three languages and all passed:
+- Python code → detected as Python with 43% confidence ✅
+- JavaScript code → detected as JavaScript with 50% confidence ✅
+- SQL query → detected as SQL with 38% confidence ✅
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| linguist-js requires file system access | Used custom regex-based detector instead |
+| Git directory deletion warning during commit | Typed `y` to confirm and push completed successfully |
+
+---
+
+### What I Learned
+- How to build a regex-based language classifier
+- How to design a confidence scoring system
+- How to inject dynamic context into AI system prompts
+- How to build RESTful endpoints for language detection
+- How pattern matching can replace heavy ML models for simple classification tasks
+
+---
+
+## 🏆 Sprint 2 Overall Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 6 | LLM API Integration | 3 | ⏳ API key pending |
+| Story 7 | Prompt Engineering | 3 | ✅ Done |
+| Story 8 | Session Memory | 3 | ✅ Done |
+| Story 9 | Language Detection | 2 | ✅ Done |
+
+**Total Points Completed: 8/11** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- Regex pattern matching — language classification
+- Express.js — API endpoints
+- JavaScript Map — pattern storage
+- Confidence scoring algorithm
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
