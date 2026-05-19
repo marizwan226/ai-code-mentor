@@ -1,0 +1,96 @@
+## 📋 Daily Progress Report — Day 10
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 10
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 10 — Error Handling & Rate Limiting
+**Epic:** epic-2 backend | **Priority:** Medium | **Points:** 2 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built a robust error handling and rate limiting system for the AI Code Mentor backend. The goal was to make the API handle failures gracefully so the app never crashes on LLM errors or abusive usage.
+
+**Rate Limiter Middleware** — I installed `express-rate-limit` and created `middleware/rateLimiter.js` with two separate rate limiters. The chat rate limiter allows a maximum of 20 requests per minute per user. If exceeded it returns a friendly `429` status with a clear message telling the user to wait before trying again. The auth rate limiter is stricter, allowing only 10 login attempts per 15 minutes to protect against brute force attacks. Both limiters return structured JSON responses instead of generic server errors.
+
+**Request Logger Middleware** — I created `middleware/logger.js` which logs every incoming request with a timestamp, HTTP method, URL, and user ID. When a response has an error status (400 or above) it also logs the full error details. This gives full visibility into what is happening in the server at all times and makes debugging much easier.
+
+**Centralized Error Handler** — I created `middleware/errorHandler.js` which acts as a global catch-all for any unhandled errors in the application. It handles three specific error types intelligently. LLM timeout errors return a `504` status with a message telling the user the AI took too long to respond. Rate limit and quota exceeded errors return a `429` status with a message about high usage. Authentication errors return a `401` status. Any other unexpected errors return a generic `500` status with a friendly message. All errors are logged with timestamp and user ID for debugging.
+
+**LLM Timeout Handling** — I updated `services/llm.service.js` to wrap all Claude API calls with a 30 second timeout using `AbortController`. If the AI takes longer than 30 seconds to respond the request is automatically cancelled and a timeout error is thrown. This prevents the server from hanging indefinitely on slow API responses. The streaming endpoint also handles timeouts gracefully by sending an error message through the stream before closing the connection.
+
+**App Integration** — I updated `app.js` to wire everything together. The logger runs on every request, the rate limiters are applied to the chat and auth routes specifically, and the error handler sits at the very bottom of the middleware stack to catch any errors that bubble up from the routes.
+
+---
+
+### How the Error Flow Works
+
+```
+Request comes in
+      ↓
+Logger records it
+      ↓
+Rate limiter checks limit
+      ↓ (if over limit)
+Returns 429 friendly message
+      ↓ (if within limit)
+Route handler runs
+      ↓ (if error occurs)
+Error bubbles up to errorHandler
+      ↓
+Error logged with timestamp
+      ↓
+Friendly error returned to user
+```
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| Git deletion warning during commit | Typed `n` to skip and push completed successfully |
+| Windows Git cleanup warning repeating | Fixed with `git config --global gc.auto 0` |
+
+---
+
+### What I Learned
+- How to implement rate limiting in Express.js
+- How to build a centralized error handler middleware
+- How to use AbortController for API timeouts
+- How to log requests and errors with structured format
+- How middleware order matters in Express.js
+- Difference between 429, 504, 401, and 500 HTTP status codes
+
+---
+
+## 🏆 Sprint 2 Overall Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 6 | LLM API Integration | 3 | ⏳ API key pending |
+| Story 7 | Prompt Engineering | 3 | ✅ Done |
+| Story 8 | Session Memory | 3 | ✅ Done |
+| Story 9 | Language Detection | 2 | ✅ Done |
+| Story 10 | Error Handling & Rate Limiting | 2 | ✅ Done |
+
+**Total Points Completed: 10/13** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- express-rate-limit — request rate limiting
+- AbortController — API timeout handling
+- Express middleware — request logging and error handling
+- HTTP status codes — 429, 504, 401, 500
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
