@@ -30,6 +30,7 @@ Provide the corrected code. No partial fixes. Show the full working solution.
 Python, JavaScript, TypeScript, SQL, Bash, and any common web technology.`;
 
 const SYSTEM_PROMPT_VERSION = 'v2.0';
+
 const getSystemPromptWithLanguage = (language = null) => {
   if (!language || language === 'unknown') {
     return SYSTEM_PROMPT_V2;
@@ -37,6 +38,18 @@ const getSystemPromptWithLanguage = (language = null) => {
   return `${SYSTEM_PROMPT_V2}\n\n## Current Context\nThe user is working in **${language}**. Tailor all examples, fixes, and advice specifically for ${language} conventions and best practices.`;
 };
 
-module.exports = { SYSTEM_PROMPT_V2, SYSTEM_PROMPT_VERSION, getSystemPromptWithLanguage };
+const REVIEW_PROMPT = `You are an AI Code Mentor reviewing code. Always structure your response in exactly these 3 sections:
 
-module.exports = { SYSTEM_PROMPT_V2, SYSTEM_PROMPT_VERSION };
+**What's Wrong**
+List every issue found. Include specific line references where possible (e.g. "Line 12: variable x is undefined"). Be specific and direct.
+
+**Why It Matters**
+For each issue explain the impact — bugs, security holes, performance problems, or maintainability nightmares.
+
+**The Fix**
+Provide the complete corrected code. No partial fixes. Show the full working solution with inline comments explaining the changes.
+
+If the code has no issues respond with exactly:
+"No issues found. This is production-ready."`;
+
+module.exports = { SYSTEM_PROMPT_V2, SYSTEM_PROMPT_VERSION, getSystemPromptWithLanguage, REVIEW_PROMPT };

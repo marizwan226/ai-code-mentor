@@ -1,0 +1,73 @@
+## 📋 Daily Progress Report — Day 11
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 11
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 11 — Code Editor in Browser
+**Epic:** epic-3 frontend | **Priority:** High | **Points:** 3 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built a fully functional browser-based code editor for the AI Code Mentor review page. The goal was to give users a comfortable professional coding environment directly in the browser where they can write or paste code and submit it for AI review.
+
+**Monaco Editor Integration** — I installed `@monaco-editor/react` which is the same editor that powers VS Code. I used Next.js `dynamic` import with `ssr: false` to load it only on the client side since Monaco requires browser APIs. The editor is configured with dark theme, line numbers, word wrap, automatic layout, and a font size of 14px for comfortable reading.
+
+**CodeEditor Component** — I created `app/components/CodeEditor.tsx` which is the main component that brings everything together. It manages the code state, language selection, file upload, API calls, and review display. When the user types code the component automatically triggers language detection after 20 characters. When the user clicks Submit for Review it sends the code to the backend `POST /api/chat` endpoint with the detected language as context and displays the AI response below the editor.
+
+**LanguageSelector Component** — I created `app/components/LanguageSelector.tsx` which is a dropdown menu showing all 8 supported languages with emoji badges. It has an Auto Detect option at the top which uses the backend language detection service. When a language is auto-detected a small badge appears showing the detected language name. The user can also manually override the detection by selecting any language from the dropdown.
+
+**FileUpload Component** — I created `app/components/FileUpload.tsx` which allows users to upload code files directly into the editor. It supports `.py`, `.js`, `.ts`, `.sql`, `.java`, `.go`, `.cpp`, and `.sh` file extensions. When a file is uploaded its content is loaded into the Monaco editor and the language is automatically set based on the file extension.
+
+**Error Handling in UI** — The component handles three error cases gracefully. If the user submits without code it shows a friendly message asking them to enter code. If the backend returns a 429 rate limit error it shows a message asking the user to wait. If the server is unreachable it shows a message to check that the backend is running.
+
+**Review Page Update** — I updated `app/review/page.tsx` to render the CodeEditor component inside the Layout with a title and description.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000/review` and confirmed:
+
+- ✅ Monaco editor loaded with dark theme and line numbers
+- ✅ Language selector showing all 8 languages with emoji badges
+- ✅ File upload button visible and functional
+- ✅ Submit for Review button present and clickable
+- ✅ Auto detect badge appears when language is detected
+
+---
+
+### What I Learned
+- How to integrate Monaco Editor in a Next.js app
+- How to use dynamic imports with `ssr: false` for browser-only components
+- How to build a file reader using the FileReader API
+- How to wire frontend components to backend API endpoints
+- How to handle different HTTP error codes in the UI gracefully
+
+---
+
+## 🏆 Sprint 3 Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 11 | Code Editor in Browser | 3 | ✅ Done |
+
+---
+
+## 🛠️ Technologies Used Today
+- Monaco Editor (`@monaco-editor/react`) — VS Code-powered browser editor
+- Next.js dynamic imports — client-side only loading
+- FileReader API — file upload handling
+- React hooks (useState, useCallback) — state management
+- Tailwind CSS — responsive styling
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

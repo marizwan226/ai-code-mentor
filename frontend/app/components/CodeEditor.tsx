@@ -4,10 +4,12 @@ import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import LanguageSelector from './LanguageSelector';
 import FileUpload from './FileUpload';
+import ReviewResponse from './ReviewResponse';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
-interface ReviewResponse {
+// Renamed interface to avoid conflict with ReviewResponse component
+interface ReviewData {
   response: string;
   sessionId: string;
 }
@@ -103,7 +105,7 @@ export default function CodeEditor() {
         return;
       }
 
-      const data: ReviewResponse = await res.json();
+      const data: ReviewData = await res.json();
       setReview(data.response);
       setSessionId(data.sessionId);
 
@@ -169,14 +171,10 @@ export default function CodeEditor() {
 
       {/* Review Result */}
       {review && (
-        <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-          <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-            🤖 AI Code Review
-          </h3>
-          <pre className="text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-            {review}
-          </pre>
-        </div>
+        <ReviewResponse
+          response={review}
+          language={language !== 'auto' ? language : detectedLanguage}
+        />
       )}
     </div>
   );
