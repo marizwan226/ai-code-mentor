@@ -1,0 +1,88 @@
+## 📋 Daily Progress Report — Day 15
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 15
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 15 — Session History
+**Epic:** epic-3 features | **Priority:** Medium | **Points:** 2 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built the Session History feature for the AI Code Mentor. The goal was to allow users to view all their past code reviews and chats so they can revisit feedback and track their progress over time.
+
+**Session Model** — I created `backend/models/Session.js` using Mongoose. The schema stores the user ID, session ID, session type (chat, review, or explain), programming language, title, preview text, and an array of messages. Each message has a role (user or assistant), content, and timestamp. I also added a static method called `enforceLimit` which automatically deletes the oldest sessions when a user exceeds 50 saved sessions. This prevents the database from growing too large over time.
+
+**Session Controller** — I created `backend/controllers/sessionController.js` with four functions. The `saveSession` function creates a new session or updates an existing one based on the session ID. The `getSessions` function returns all sessions for a user sorted by most recently updated, excluding the message content for performance. The `getSession` function returns a single full session including all messages when the user clicks to view it. The `deleteSession` function removes a session permanently from the database.
+
+**Session Routes** — I created `backend/routes/sessions.js` with four REST endpoints. `POST /api/sessions` saves or updates a session. `GET /api/sessions` returns all sessions for the current user. `GET /api/sessions/:sessionId` returns a single full session. `DELETE /api/sessions/:sessionId` deletes a session.
+
+**App Integration** — I updated `backend/app.js` to register the new session routes under `/api/sessions`.
+
+**History Page UI** — I built the entire history page at `frontend/app/history/page.tsx` as a two-column split view layout. The left column shows a scrollable list of all sessions with their type badge, language, title, preview text, timestamp, and a delete button. The right column shows the full conversation when a session is clicked with messages displayed in the same bubble style as the chat interface. If no session is selected it shows a helpful prompt. If no sessions exist it shows an empty state with a mailbox emoji and a message encouraging the user to start a chat or review.
+
+**Session Type Badges** — Each session in the list shows a colored badge indicating whether it was a Chat (indigo), Review (blue), or Explain (emerald) session. This makes it easy to visually identify session types at a glance.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000/history` and confirmed:
+- ✅ Session History page loads correctly
+- ✅ Two-column split view layout working
+- ✅ Empty state shows correctly with Sessions (0)
+- ✅ No backend error — sessions API connected successfully
+- ✅ Select a session prompt visible on the right panel
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| Backend session route not registered | Added `sessionRoutes` to `app.js` |
+| Page showing error on first load | Fixed by registering the route correctly |
+
+---
+
+### What I Learned
+- How to build a Mongoose schema with embedded documents
+- How to implement automatic record limit enforcement in MongoDB
+- How to build a split view layout with React
+- How to design a session list with filtering and deletion
+- How to fetch and display full conversation history
+- How REST CRUD endpoints work for session management
+
+---
+
+## 🏆 Sprint 3 Overall Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 11 | Code Editor in Browser | 3 | ✅ Done |
+| Story 12 | Structured Code Review | 3 | ✅ Done |
+| Story 13 | Chat Interface | 2 | ✅ Done |
+| Story 14 | Code Explanation Feature | 2 | ✅ Done |
+| Story 15 | Session History | 2 | ✅ Done |
+
+**Total Sprint 3 Points: 12** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- Mongoose schema with embedded documents
+- Static methods for automatic session limit enforcement
+- Express REST API — CRUD endpoints
+- React useState and useEffect — data fetching
+- Tailwind CSS — split view layout and session badges
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

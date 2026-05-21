@@ -1,4 +1,5 @@
 'use client';
+import NextStepsCard, { parseNextSteps } from './NextStepsCard';
 
 import CopyButton from './CopyButton';
 
@@ -154,6 +155,8 @@ export default function ReviewResponse({ response, language }: ReviewResponsePro
           </div>
         </div>
       )}
+      {/* Next Steps */}
+<NextStepsCard steps={parseNextSteps(response)} />
     </div>
   );
 }
