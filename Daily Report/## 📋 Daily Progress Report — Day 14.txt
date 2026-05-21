@@ -1,0 +1,76 @@
+## 📋 Daily Progress Report — Day 14
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 14
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 14 — Code Explanation Feature
+**Epic:** epic-3 features | **Priority:** Medium | **Points:** 2 | **Estimate:** 0.5 day
+
+---
+
+### What I Did
+
+Today I built the Code Explanation feature for the AI Code Mentor. The goal was to allow users who are learning to code to paste any code snippet and receive a plain-English explanation broken down block by block so they can understand what the code does without needing prior experience.
+
+**Explain Prompt Template** — I added a dedicated `EXPLAIN_PROMPT` constant to `backend/config/systemPrompt.js`. This prompt instructs the AI to always explain code in exactly three sections. The first section is **Overview** which explains what the code does at a high level in 2-3 plain English sentences with no jargon. The second section is **Block-by-Block** which goes through each logical block or function one at a time with line range references like "Lines 1-5:" and plain English explanations. The third section is **Summary** which wraps up the key purpose and important patterns in 1-2 sentences. The prompt also enforces a maximum of 150 lines of code and instructs the AI to focus on what the code does rather than how to improve it.
+
+**ExplainResponse Component** — I created `frontend/app/components/ExplainResponse.tsx` which renders the AI explanation in a structured colored card layout. It parses the response to detect the three sections and renders them in separate colored cards — blue for Overview, indigo for Block-by-Block, and green for Summary. It also includes a Copy button at the top so users can copy the full explanation. If the response is not structured it falls back to a clean plain text display.
+
+**Explain Button** — I updated `CodeEditor.tsx` to add a green `💡 Explain Code` button alongside the existing blue `🔍 Submit for Review` button. The two buttons sit side by side in a row. The Explain button validates that code is entered and checks that it is under 150 lines before sending the request. While the explanation is loading it shows `⏳ Explaining...` and disables both buttons to prevent duplicate requests.
+
+**Tab View** — I added a tab system that appears after either a review or explanation is generated. Users can switch between the `🔍 Review` tab and the `💡 Explain` tab to see both results without losing either. The active tab is highlighted with a colored underline matching the feature color — indigo for review and emerald for explain.
+
+**State Management** — I added three new state variables to `CodeEditor.tsx`: `explanation` to store the AI explanation text, `explaining` to track the loading state for the explain request, and `activeTab` to track which tab is currently visible.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000/review` and confirmed:
+- ✅ Two buttons side by side — Submit for Review (indigo) and Explain Code (green)
+- ✅ Monaco editor loads correctly with dark theme
+- ✅ Language selector and file upload working
+- ✅ Tab system appears after results are generated
+- ✅ ExplainResponse component renders with colored sections
+
+---
+
+### What I Learned
+- How to write effective explain-mode prompt templates for AI
+- How to parse structured AI responses into separate sections
+- How to implement a tab system in React using state
+- How to validate line count before sending code to the AI
+- How to disable multiple buttons during async operations
+- How to design color-coded section cards for structured output
+
+---
+
+## 🏆 Sprint 3 Overall Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 11 | Code Editor in Browser | 3 | ✅ Done |
+| Story 12 | Structured Code Review | 3 | ✅ Done |
+| Story 13 | Chat Interface | 2 | ✅ Done |
+| Story 14 | Code Explanation Feature | 2 | ✅ Done |
+
+**Total Sprint 3 Points: 10** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- React hooks (useState, useCallback) — state management
+- Tailwind CSS — tab system and colored section cards
+- Prompt engineering — explain-mode template
+- Next.js dynamic imports — Monaco editor
+- Fetch API — backend communication
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

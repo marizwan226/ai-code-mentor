@@ -28,6 +28,9 @@ app.use('/auth', authRateLimiter, authRoutes);
 const chatRoutes = require('./routes/chat');
 app.use('/api/chat', chatRateLimiter, chatRoutes);
 
+const sessionRoutes = require('./routes/sessions');
+app.use('/api/sessions', sessionRoutes);
+
 // Health Check Route
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
