@@ -1,0 +1,74 @@
+## 📋 Daily Progress Report — Day 12
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 12
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 12 — Structured Code Review Response
+**Epic:** epic-3 features | **Priority:** High | **Points:** 3 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built the structured AI response rendering system for the Code Review feature. The goal was to make the AI always return feedback in a clear three-section format and display it beautifully in the UI with syntax highlighted code blocks and a copy button.
+
+**Review Prompt Template** — I added a dedicated `REVIEW_PROMPT` constant to `backend/config/systemPrompt.js`. This prompt instructs the AI to always structure its response in exactly three sections. The first section is **What's Wrong** which lists every issue found with specific line references. The second section is **Why It Matters** which explains the impact of each issue in terms of bugs, security holes, or performance problems. The third section is **The Fix** which provides the complete corrected code with inline comments. If the code has no issues the AI responds with exactly "No issues found. This is production-ready."
+
+**ReviewResponse Component** — I created `frontend/app/components/ReviewResponse.tsx` which is a smart response renderer. It detects whether the AI response contains structured sections by looking for keywords like "What's Wrong", "Why It Matters", and "The Fix". If the response is structured it renders each section in a colored card — red for issues, yellow for why it matters, and green for the fix. If the response is unstructured it falls back to a clean raw text display.
+
+**Code Block Highlighting** — The `ReviewResponse` component parses the AI response and identifies code blocks wrapped in triple backticks. It renders each code block with a dark background, the language label, monospace green text, and a copy button. Inline code wrapped in single backticks is rendered with yellow highlighted text to stand out from regular text.
+
+**CopyButton Component** — I created `frontend/app/components/CopyButton.tsx` which uses the Clipboard API to copy text to the clipboard. When clicked it shows a "Copied!" confirmation for 2 seconds before resetting. It also has a fallback using `execCommand` for older browsers that don't support the Clipboard API.
+
+**CodeEditor Integration** — I updated `CodeEditor.tsx` to use the new `ReviewResponse` component instead of the plain text display. I also fixed a naming conflict where both an imported component and a TypeScript interface were named `ReviewResponse` by renaming the interface to `ReviewData`.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000/review` and confirmed:
+- ✅ Monaco editor loads with dark theme
+- ✅ Language selector and file upload working
+- ✅ Submit for Review button visible
+- ✅ ReviewResponse component renders correctly
+- ✅ Copy button appears on code blocks and review header
+
+---
+
+### What I Learned
+- How to parse and render structured AI responses in React
+- How to detect and highlight code blocks from markdown text
+- How to use the Clipboard API for copy to clipboard functionality
+- How to design color-coded section cards for structured feedback
+- How TypeScript interface naming conflicts can cause runtime errors
+- How to write effective review-specific prompt templates
+
+---
+
+## 🏆 Sprint 3 Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 11 | Code Editor in Browser | 3 | ✅ Done |
+| Story 12 | Structured Code Review | 3 | ✅ Done |
+
+**Total Sprint 3 Points: 6** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- React components — ReviewResponse, CopyButton
+- Clipboard API — copy to clipboard
+- Markdown parsing — code block detection
+- Tailwind CSS — colored section cards
+- TypeScript interfaces — type safety
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
