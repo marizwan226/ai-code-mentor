@@ -5,10 +5,10 @@ import dynamic from 'next/dynamic';
 import LanguageSelector from './LanguageSelector';
 import FileUpload from './FileUpload';
 import ReviewResponse from './ReviewResponse';
+import ExplainResponse from './ExplainResponse';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
-// Renamed interface to avoid conflict with ReviewResponse component
 interface ReviewData {
   response: string;
   sessionId: string;
@@ -31,9 +31,12 @@ export default function CodeEditor() {
   const [language, setLanguage] = useState('auto');
   const [detectedLanguage, setDetectedLanguage] = useState('');
   const [review, setReview] = useState('');
+  const [explanation, setExplanation] = useState('');
   const [loading, setLoading] = useState(false);
+  const [explaining, setExplaining] = useState(false);
   const [error, setError] = useState('');
   const [sessionId, setSessionId] = useState('');
+  const [activeTab, setActiveTab] = useState<'review' | 'explain'>('review');
 
   const detectLanguage = useCallback(async (codeSnippet: string) => {
     if (codeSnippet.length < 10) return;
@@ -81,6 +84,7 @@ export default function CodeEditor() {
     setLoading(true);
     setError('');
     setReview('');
+    setActiveTab('review');
 
     try {
       const langContext = language !== 'auto' ? language : detectedLanguage || 'unknown';
@@ -113,6 +117,52 @@ export default function CodeEditor() {
       setError('Failed to connect to the server. Make sure the backend is running.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExplain = async () => {
+    if (!code.trim() || code === '# Paste your code here...') {
+      setError('Please enter some code to explain.');
+      return;
+    }
+
+    const lineCount = code.split('\n').length;
+    if (lineCount > 150) {
+      setError('Code explanation supports up to 150 lines. Please trim your code.');
+      return;
+    }
+
+    setExplaining(true);
+    setError('');
+    setExplanation('');
+    setActiveTab('explain');
+
+    try {
+      const langContext = language !== 'auto' ? language : detectedLanguage || 'unknown';
+      const prompt = `Please explain this ${langContext !== 'unknown' ? langContext : ''} code line by line in plain English:\n\n\`\`\`\n${code}\n\`\`\``;
+
+      const res = await fetch('http://localhost:5000/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: prompt }],
+          sessionId: sessionId || undefined
+        })
+      });
+
+      if (!res.ok) {
+        setError('Something went wrong. Please try again.');
+        return;
+      }
+
+      const data: ReviewData = await res.json();
+      setExplanation(data.response);
+      setSessionId(data.sessionId);
+
+    } catch {
+      setError('Failed to connect to the server. Make sure the backend is running.');
+    } finally {
+      setExplaining(false);
     }
   };
 
@@ -153,14 +203,23 @@ export default function CodeEditor() {
         />
       </div>
 
-      {/* Submit Button */}
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-      >
-        {loading ? '⏳ Reviewing...' : '🔍 Submit for Review'}
-      </button>
+      {/* Action Buttons */}
+      <div className="flex gap-3">
+        <button
+          onClick={handleSubmit}
+          disabled={loading || explaining}
+          className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+        >
+          {loading ? '⏳ Reviewing...' : '🔍 Submit for Review'}
+        </button>
+        <button
+          onClick={handleExplain}
+          disabled={loading || explaining}
+          className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+        >
+          {explaining ? '⏳ Explaining...' : '💡 Explain Code'}
+        </button>
+      </div>
 
       {/* Error Message */}
       {error && (
@@ -169,10 +228,44 @@ export default function CodeEditor() {
         </div>
       )}
 
+      {/* Tabs */}
+      {(review || explanation) && (
+        <div className="flex gap-2 border-b border-gray-700">
+          <button
+            onClick={() => setActiveTab('review')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'review'
+                ? 'border-indigo-500 text-indigo-400'
+                : 'border-transparent text-gray-500 hover:text-gray-300'
+            }`}
+          >
+            🔍 Review
+          </button>
+          <button
+            onClick={() => setActiveTab('explain')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'explain'
+                ? 'border-emerald-500 text-emerald-400'
+                : 'border-transparent text-gray-500 hover:text-gray-300'
+            }`}
+          >
+            💡 Explain
+          </button>
+        </div>
+      )}
+
       {/* Review Result */}
-      {review && (
+      {review && activeTab === 'review' && (
         <ReviewResponse
           response={review}
+          language={language !== 'auto' ? language : detectedLanguage}
+        />
+      )}
+
+      {/* Explain Result */}
+      {explanation && activeTab === 'explain' && (
+        <ExplainResponse
+          explanation={explanation}
           language={language !== 'auto' ? language : detectedLanguage}
         />
       )}

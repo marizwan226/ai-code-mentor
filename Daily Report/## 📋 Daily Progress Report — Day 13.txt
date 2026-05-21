@@ -1,0 +1,83 @@
+## 📋 Daily Progress Report — Day 13
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 13
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 13 — Chat Interface with Multi-Turn Conversation
+**Epic:** epic-3 features | **Priority:** High | **Points:** 2 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built a fully functional real-time chat interface for the AI Code Mentor. The goal was to give users a professional messaging experience where they can ask technical questions and receive expert AI responses with full conversation history maintained across multiple turns.
+
+**ChatWindow Component** — I created `frontend/app/components/ChatWindow.tsx` which is the main chat interface component. It manages the entire conversation state including the list of messages, the current input, loading state, session ID, and streaming text. The component auto-scrolls to the bottom whenever a new message arrives using a `useRef` and `useEffect` hook. It initializes with a welcome message from the AI introducing itself as the AI Code Mentor in Senior Developer Mode.
+
+**MessageBubble Component** — I created `frontend/app/components/MessageBubble.tsx` which renders individual messages in the conversation. User messages are right-aligned with an indigo background and a "You" avatar. AI messages are left-aligned with a dark gray background and an "AI" avatar in indigo. Each message shows a timestamp formatted in 12-hour time. The message text uses `whitespace-pre-wrap` to preserve formatting and line breaks.
+
+**Multi-Turn Conversation** — The chat maintains conversation history using the session ID returned by the backend. Each new message is appended to the existing history and the session ID is passed with every request so the backend can retrieve the full conversation context and pass it to the AI. This allows the AI to remember what was discussed earlier in the session.
+
+**New Conversation Button** — A "New Conversation" button in the header clears all messages, resets the session ID, and shows a fresh welcome message. This ensures no history bleeds between conversations.
+
+**Keyboard Shortcuts** — The textarea handles keyboard events so that pressing **Enter** submits the message and pressing **Shift+Enter** adds a new line without submitting. This matches the behavior users expect from modern chat applications like Slack and WhatsApp.
+
+**Loading Indicator** — While waiting for the AI response three bouncing dots appear in the AI message position using CSS `animate-bounce` with staggered animation delays. This gives clear visual feedback that the AI is processing the request.
+
+**Error Handling** — The component handles three error cases. A 429 rate limit error shows a friendly warning message in the chat. A non-OK response shows a generic error message. A network failure shows a message asking the user to check the backend connection. All errors appear as AI messages in the chat so the experience stays consistent.
+
+**Chat Page Update** — I updated `app/chat/page.tsx` to render the `ChatWindow` component inside the Layout wrapper.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000/chat` and confirmed:
+- ✅ Dark themed chat interface loaded perfectly
+- ✅ AI welcome message with avatar and timestamp visible
+- ✅ "AI Code Mentor — Senior Developer Mode" header showing
+- ✅ New Conversation button in top right corner
+- ✅ Message input box at the bottom with placeholder text
+- ✅ Send button (➤) on the right
+- ✅ "Enter to send · Shift+Enter for new line" hint visible
+
+---
+
+### What I Learned
+- How to build a real-time chat interface in React
+- How to use `useRef` and `useEffect` for auto-scrolling
+- How to handle keyboard shortcuts in textarea elements
+- How to manage multi-turn conversation state with session IDs
+- How to create animated loading indicators with CSS
+- How to design message bubbles with proper alignment and avatars
+
+---
+
+## 🏆 Sprint 3 Overall Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 11 | Code Editor in Browser | 3 | ✅ Done |
+| Story 12 | Structured Code Review | 3 | ✅ Done |
+| Story 13 | Chat Interface | 2 | ✅ Done |
+
+**Total Sprint 3 Points Completed: 8** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- React hooks (useState, useRef, useEffect, useCallback) — state and side effects
+- CSS animate-bounce — loading indicator
+- Tailwind CSS — message bubble styling
+- Keyboard event handling — Enter/Shift+Enter shortcuts
+- Session management — multi-turn conversation
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
