@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Layout from '@/components/Layout';
 
 interface Session {
   sessionId: string;
@@ -90,8 +89,7 @@ export default function History() {
   };
 
   return (
-    <Layout>
-      <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Session History</h2>
           <p className="text-gray-500 mt-1">View and revisit your past code reviews and chats</p>
@@ -213,7 +211,6 @@ export default function History() {
             )}
           </div>
         </div>
-      </div>
-    </Layout>
+</div>
   );
 }

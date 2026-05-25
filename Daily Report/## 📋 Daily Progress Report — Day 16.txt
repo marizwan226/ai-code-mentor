@@ -1,0 +1,77 @@
+## 📋 Daily Progress Report — Day 16
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 16
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 16 — Next Steps Learning Suggestions
+**Epic:** epic-3 features | **Priority:** Low | **Points:** 2 | **Estimate:** 0.5 day
+
+---
+
+### What I Did
+
+Today I built the Next Steps Learning Suggestions feature for the AI Code Mentor. The goal was to make the AI automatically suggest what the user should learn next based on the errors and gaps it spotted during code review, turning every review into a personalized learning opportunity.
+
+**Updated Review Prompt** — I updated the `REVIEW_PROMPT` in `backend/config/systemPrompt.js` from 3 sections to 4 sections. The new fourth section is **Next Steps** which instructs the AI to suggest exactly 3 specific things the developer should learn based on the gaps found during the review. The prompt enforces specific and actionable suggestions with examples like "Async/await patterns: Your code uses callbacks which leads to callback hell" rather than generic advice like "learn JavaScript better".
+
+**NextStepsCard Component** — I created `frontend/app/components/NextStepsCard.tsx` which renders the learning suggestions in a styled amber-colored card. The component has a header with a 🎯 emoji and a suggestion count badge. Each suggestion is displayed with a numbered list showing the topic name, the reason why it matters, and a clickable link to a free learning resource.
+
+**Free Resources Map** — The component includes a built-in map of free learning resources that automatically matches suggestions to relevant documentation. For example if the AI suggests learning async/await it links to MDN, if it suggests Python it links to docs.python.org, if it suggests TypeScript it links to the TypeScript Handbook, and if it suggests React it links to react.dev. All resources are free and official documentation.
+
+**parseNextSteps Function** — I wrote a parser function that extracts the Next Steps section from the AI response by splitting on keywords like "next steps", "what to learn", and "learn next". It then processes each line removing bullet point markers and splitting on colons to separate the topic from the reason. It returns a maximum of 3 suggestions.
+
+**ReviewResponse Integration** — I updated `ReviewResponse.tsx` to import and render the `NextStepsCard` component at the bottom of every review response. The card only appears when the AI includes a Next Steps section in its response.
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| Build error — `<a>` tag broken in NextStepsCard | Recreated file using terminal `cat` command |
+| Next.js cache serving old broken file | Cleared `.next` folder with `rm -rf .next` |
+| Duplicate module.exports in systemPrompt.js | Removed duplicate and kept single clean export |
+
+---
+
+### What I Learned
+- How to extend an existing prompt template with new sections
+- How to parse structured text from AI responses using regex
+- How to build a resource matching system using a lookup map
+- How Next.js Turbopack caches files and how to clear it
+- How to use the terminal `cat` command to write files directly
+- How to debug JSX syntax errors in TypeScript React components
+
+---
+
+## 🏆 Sprint 3 Overall Final Summary
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 11 | Code Editor in Browser | 3 | ✅ Done |
+| Story 12 | Structured Code Review | 3 | ✅ Done |
+| Story 13 | Chat Interface | 2 | ✅ Done |
+| Story 14 | Code Explanation Feature | 2 | ✅ Done |
+| Story 15 | Session History | 2 | ✅ Done |
+| Story 16 | Next Steps Suggestions | 2 | ✅ Done |
+
+**Total Sprint 3 Points: 14** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- Prompt engineering — 4-section review format
+- React components — NextStepsCard with resource linking
+- Text parsing — regex-based section extraction
+- Next.js cache management — clearing `.next` folder
+- Tailwind CSS — amber-colored suggestion cards
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
