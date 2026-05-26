@@ -1,0 +1,86 @@
+## 📋 Daily Progress Report — Day 22
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 22
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 22 — Backend Deployment to Render
+**Epic:** epic-5 devops | **Priority:** High | **Points:** 2 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I deployed the AI Code Mentor backend to production on Render. The goal was to get the backend running on a live public URL so it can be accessed from anywhere in the world instead of just on localhost.
+
+**Production Preparation** — I updated `backend/app.js` to be production-ready. I updated the CORS configuration to accept requests from both `localhost:3000` for local development and the production Vercel frontend URL. I also updated the health check endpoint to return additional information including the current environment name and a timestamp so it is easy to verify the server is running correctly in production.
+
+**Environment Example File** — I created `backend/.env.example` which documents all the required environment variables for the project. This file is safe to commit to GitHub because it contains no real secrets — just placeholder values. It serves as documentation for anyone setting up the project for the first time.
+
+**Render Deployment** — I deployed the backend to Render which is a cloud platform that supports free Node.js hosting with automatic deployments from GitHub. I configured the web service with the following settings. The name is `ai-code-mentor-backend`, the runtime is Node.js, the branch is `main`, the root directory is `backend` since this is a monorepo with both frontend and backend in the same repository, the build command is `npm install`, and the start command is `node app.js`.
+
+**Environment Variables** — I set three environment variables in the Render dashboard. `ANTHROPIC_API_KEY` contains the OpenRouter API key for accessing the Claude AI model. `JWT_SECRET` contains the secret key for signing JSON Web Tokens for authentication. `NODE_ENV` is set to `production` which enables production-mode behaviour in the Express server.
+
+**Auto-Deploy** — Render is connected directly to the GitHub repository and automatically redeploys the backend every time a new commit is pushed to the `main` branch. This means no manual deployment steps are needed in the future.
+
+**Health Check Verification** — After deployment I tested the health check endpoint at `https://ai-code-mentor-backend-jqsp.onrender.com/health` and confirmed it returned a 200 response with the correct JSON body showing status ok, environment production, and a live timestamp.
+
+**Git Branch Sync** — I merged the `develop` branch into `main` so all 22 stories of completed work are now on the production branch and deployed to Render.
+
+---
+
+### Live URLs
+
+| Service | URL |
+|---|---|
+| Backend Health Check | `https://ai-code-mentor-backend-jqsp.onrender.com/health` |
+| Backend API Base | `https://ai-code-mentor-backend-jqsp.onrender.com` |
+
+---
+
+### Health Check Response
+```json
+{
+  "status": "ok",
+  "environment": "production",
+  "timestamp": "2026-05-26T11:48:09.268Z"
+}
+```
+
+---
+
+### What I Learned
+- How to deploy a Node.js backend to Render
+- How to configure environment variables in a cloud dashboard
+- How to set up auto-deploy from a GitHub repository
+- How to configure CORS for both development and production URLs
+- How to use a monorepo root directory setting in Render
+- How to verify a production deployment with a health check endpoint
+- How to sync Git branches for production deployment
+
+---
+
+## 🏆 Sprint 5 Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 22 | Backend Deployment | 2 | ✅ Done |
+
+---
+
+## 🛠️ Technologies Used Today
+- Render — cloud hosting platform for Node.js
+- GitHub Actions auto-deploy — triggered on push to main
+- Environment variables — secure secret management
+- CORS configuration — production URL allowlist
+- Health check endpoint — deployment verification
+- Git branch merging — develop to main
+- JSON Web Tokens — JWT secret in production
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

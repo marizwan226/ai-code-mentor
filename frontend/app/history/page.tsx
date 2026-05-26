@@ -1,4 +1,5 @@
 'use client';
+import API_URL from '../config/api';
 
 import { useState, useEffect } from 'react';
 
@@ -46,7 +47,7 @@ export default function History() {
 
   const fetchSessions = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/sessions');
+      const res = await fetch('${API_URL}/api/sessions');
       const data = await res.json();
       setSessions(data.sessions || []);
     } catch {
@@ -58,7 +59,7 @@ export default function History() {
 
   const fetchSession = async (sessionId: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/sessions/${sessionId}`);
+      const res = await fetch(`${API_URL}/api/sessions/${sessionId}`);
       const data = await res.json();
       setSelectedSession(data.session);
     } catch {
@@ -69,7 +70,7 @@ export default function History() {
   const deleteSession = async (sessionId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      await fetch(`http://localhost:5000/api/sessions/${sessionId}`, {
+      await fetch(`${API_URL}/api/sessions/${sessionId}`, {
         method: 'DELETE'
       });
       setSessions(prev => prev.filter(s => s.sessionId !== sessionId));

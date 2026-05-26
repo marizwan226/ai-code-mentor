@@ -1,4 +1,5 @@
 'use client';
+import API_URL from '../config/api';
 import { useTheme } from '../context/ThemeContext';
 import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
@@ -42,7 +43,7 @@ export default function CodeEditor() {
   const detectLanguage = useCallback(async (codeSnippet: string) => {
     if (codeSnippet.length < 10) return;
     try {
-      const res = await fetch('http://localhost:5000/api/chat/detect-language', {
+      const res = await fetch('${API_URL}/api/chat/detect-language', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: codeSnippet })
@@ -91,7 +92,7 @@ export default function CodeEditor() {
       const langContext = language !== 'auto' ? language : detectedLanguage || 'unknown';
       const prompt = `Please review this ${langContext !== 'unknown' ? langContext : ''} code:\n\n\`\`\`\n${code}\n\`\`\``;
 
-      const res = await fetch('http://localhost:5000/api/chat', {
+      const res = await fetch('${API_URL}/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -142,7 +143,7 @@ export default function CodeEditor() {
       const langContext = language !== 'auto' ? language : detectedLanguage || 'unknown';
       const prompt = `Please explain this ${langContext !== 'unknown' ? langContext : ''} code line by line in plain English:\n\n\`\`\`\n${code}\n\`\`\``;
 
-      const res = await fetch('http://localhost:5000/api/chat', {
+      const res = await fetch('${API_URL}/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

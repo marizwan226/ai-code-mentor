@@ -1,5 +1,5 @@
 'use client';
-
+import API_URL from '../config/api';
 import { useState, useRef, useEffect } from 'react';
 import MessageBubble from './MessageBubble';
 import StreamingMessage from './StreamingMessage';
@@ -91,7 +91,7 @@ export default function ChatWindow() {
     abortControllerRef.current = new AbortController();
 
     try {
-      const res = await fetch('http://localhost:5000/api/chat/stream', {
+      const res = await fetch('${API_URL}/api/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
