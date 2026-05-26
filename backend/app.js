@@ -10,7 +10,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: [
+    'http://localhost:3000',
+    'https://ai-code-mentor.vercel.app',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  credentials: true
 }));
 app.use(express.json());
 
@@ -33,7 +38,11 @@ app.use('/api/sessions', sessionRoutes);
 
 // Health Check Route
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+  res.json({
+    status: 'ok',
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Centralized Error Handler

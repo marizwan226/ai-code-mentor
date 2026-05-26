@@ -1,0 +1,11 @@
+Label: epic-5 devops priority-high
+Story Points: 2
+Sprint: 5
+Estimate: 1 day
+Acceptance Criteria:
+
+ Backend deployed and live on a public URL
+ All environment variables set in platform dashboard
+ Health check endpoint returns 200 in production
+ Auto-deploy on push to main branch
+ Custom domain configured (optional but recommended)
