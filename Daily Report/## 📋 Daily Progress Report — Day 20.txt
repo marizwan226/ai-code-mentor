@@ -1,0 +1,91 @@
+## 📋 Daily Progress Report — Day 20
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 20
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 20 — Onboarding & Empty States
+**Epic:** epic-4 frontend | **Priority:** Medium | **Points:** 2 | **Estimate:** 0.5 day
+
+---
+
+### What I Did
+
+Today I built the Onboarding and Empty States feature for the AI Code Mentor. The goal was to make the app feel welcoming to new users by showing a helpful welcome banner with quick-start options and example prompts in the chat so users always know what to do next.
+
+**WelcomeBanner Component** — I created `frontend/app/components/WelcomeBanner.tsx` which is a dismissible welcome banner that appears at the top of the Dashboard page for new users. It shows a friendly greeting with a 👋 emoji, the app name, and a subtitle. Below the header it displays three quick-start option cards — Ask a Question which links to the Chat page, Review Your Code which links to the Review page, and Explain Code which also links to the Review page. Each card has an emoji icon, a title, a description, and a directional arrow link. At the bottom there is a "Don't show this again" text button.
+
+**localStorage Persistence** — The WelcomeBanner uses `localStorage` to track whether the user has dismissed it. On component mount it checks for a `welcome_dismissed` key in localStorage. If the key exists the banner is hidden immediately. When the user clicks either the ✕ close button or the "Don't show this again" button the key is set to `true` and the banner fades away. This means the banner only ever shows once per browser and never reappears after dismissal.
+
+**ExamplePrompts Component** — I created `frontend/app/components/ExamplePrompts.tsx` which shows three clickable example prompts in the chat interface when the conversation is empty. The three prompts cover the most common use cases — 🐛 Debug my code with a TypeError example, ⚡ Optimize performance about a slow nested loop, and 📚 Explain a concept about async/await in JavaScript. Each prompt has a colored card with a dark background matching its category. When the user clicks a prompt it automatically fills the chat input with the full prompt text and focuses the textarea so they can send it immediately or edit it first.
+
+**ChatWindow Integration** — I updated `ChatWindow.tsx` to import and render the `ExamplePrompts` component. The example prompts appear only when there is exactly one message in the conversation which is the initial AI welcome message. Once the user sends their first message the example prompts disappear and the normal conversation continues.
+
+**Dashboard Page Update** — I updated `app/page.tsx` to import and render the `WelcomeBanner` component at the top of the page. The rest of the dashboard still shows the three feature cards for Chat, Code Review, and History below the banner.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000` and confirmed:
+- ✅ Welcome banner appears at top of dashboard
+- ✅ Three quick-start cards visible — Ask, Review, Explain
+- ✅ Close button dismisses the banner
+- ✅ Don't show this again persists after page refresh
+- ✅ Chat page shows three example prompts when empty
+- ✅ Clicking a prompt fills the input field correctly
+- ✅ Dark mode working correctly on all new components
+
+---
+
+### What I Learned
+- How to use localStorage for onboarding state persistence
+- How to build dismissible banners with React state
+- How to create clickable example prompts for better UX
+- How empty states improve first-time user experience
+- How to conditionally render components based on conversation length
+- The importance of onboarding in reducing user drop-off
+
+---
+
+## 🏆 Sprint 4 Overall Final Summary
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 17 | Responsive Sidebar Navigation | 3 | ✅ Done |
+| Story 18 | Streaming Response UI | 2 | ✅ Done |
+| Story 19 | Dark Mode Toggle | 2 | ✅ Done |
+| Story 20 | Onboarding & Empty States | 2 | ✅ Done |
+
+**Total Sprint 4 Points: 9** 🎉
+
+---
+
+## Overall Project Summary
+
+| Sprint | Points | Status |
+|---|---|---|
+| Sprint 1 | 15 | ✅ Complete |
+| Sprint 2 | 13 | ✅ Complete |
+| Sprint 3 | 14 | ✅ Complete |
+| Sprint 4 | 9 | ✅ Complete |
+
+**Total Project Points Delivered: 51** 🚀
+
+---
+
+## 🛠️ Technologies Used Today
+- React useState and useEffect — banner visibility state
+- localStorage — onboarding dismissal persistence
+- Next.js Link — quick-start navigation cards
+- Tailwind CSS — colored prompt cards and banner styling
+- Conditional rendering — example prompts logic
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
