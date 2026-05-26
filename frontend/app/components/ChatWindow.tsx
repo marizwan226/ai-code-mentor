@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import MessageBubble from './MessageBubble';
 import StreamingMessage from './StreamingMessage';
+import ExamplePrompts from './ExamplePrompts';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -208,6 +209,14 @@ export default function ChatWindow() {
         {messages.map((message, index) => (
           <MessageBubble key={index} message={message} />
         ))}
+
+        {/* Example Prompts — shown only on first message */}
+        {messages.length === 1 && !loading && (
+          <ExamplePrompts onSelect={(prompt) => {
+            setInput(prompt);
+            textareaRef.current?.focus();
+          }} />
+        )}
 
         {/* Streaming message */}
         {(isStreaming || streamingContent) && (

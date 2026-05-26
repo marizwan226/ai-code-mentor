@@ -1,0 +1,89 @@
+## 📋 Daily Progress Report — Day 19
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 19
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 19 — Dark Mode Toggle
+**Epic:** epic-4 frontend | **Priority:** Medium | **Points:** 2 | **Estimate:** 0.5 day
+
+---
+
+### What I Did
+
+Today I built a Dark Mode toggle system for the AI Code Mentor application. The goal was to allow users to switch between light and dark themes with their preference saved so it persists across browser sessions.
+
+**ThemeContext** — I created `frontend/app/context/ThemeContext.tsx` which is a React Context that manages the theme state for the entire application. It uses `useState` to track the current theme as either light or dark. On first load it checks `localStorage` for a saved preference. If none is found it reads the system preference using `window.matchMedia('(prefers-color-scheme: dark)')` and defaults to whichever the user's OS is set to. When the theme changes it adds or removes the `dark` class from the root HTML element which triggers all the dark mode CSS styles. I also used a `mounted` state to prevent hydration errors that occur when the server renders a different theme than the client.
+
+**ThemeProvider** — The `ThemeProvider` component wraps the entire application in `app/layout.tsx` so every page and component has access to the theme context. It exposes `resolvedTheme` which is either "light" or "dark" and a `toggleTheme` function that switches between the two and saves the choice to `localStorage`.
+
+**Sidebar Toggle Button** — I updated `frontend/app/components/Sidebar.tsx` to import and use the `useTheme` hook. I added a toggle button at the bottom of the sidebar above the profile section. The button shows a 🌙 moon emoji and "Dark Mode" text when in light mode and a ☀️ sun emoji and "Light Mode" text when in dark mode. It also includes a visual toggle switch that slides right when dark mode is active using Tailwind's `translate-x` classes.
+
+**Monaco Editor Theme** — I updated `frontend/app/components/CodeEditor.tsx` to use the `useTheme` hook. The Monaco editor `theme` prop now dynamically switches between `vs-dark` when dark mode is active and `light` when light mode is active. This ensures the code editor always matches the overall app theme.
+
+**Dark Mode CSS** — I added dark mode CSS variables to `app/globals.css` using the `.dark` class selector. These override the default light theme colors for backgrounds, text, and borders across all pages and components.
+
+**localStorage Persistence** — Every time the user toggles the theme the choice is saved to `localStorage` under the key `theme`. On the next visit the saved preference is loaded immediately so the user never has to set it again.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000` and confirmed:
+- ✅ 🌙 Dark Mode toggle visible at bottom of sidebar
+- ✅ Clicking toggle switches theme immediately
+- ✅ Monaco editor theme switches with the app theme
+- ✅ Preference persists after page refresh
+- ✅ Defaults to system preference on first visit
+- ✅ No hydration errors
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| Hydration error on theme load | Added `mounted` state to delay theme application until client renders |
+| Theme not persisting on refresh | Used `localStorage` to save and load preference |
+| Server/client theme mismatch | Defaulted server render to dark and applied saved theme on client mount |
+
+---
+
+### What I Learned
+- How React Context works for global state management
+- How to detect system color scheme preference with `matchMedia`
+- How to prevent hydration errors with mounted state pattern
+- How to use localStorage for persistent user preferences
+- How to build an animated toggle switch with Tailwind CSS
+- How Monaco Editor supports dynamic theme switching
+
+---
+
+## 🏆 Sprint 4 Overall Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 17 | Responsive Sidebar Navigation | 3 | ✅ Done |
+| Story 18 | Streaming Response UI | 2 | ✅ Done |
+| Story 19 | Dark Mode Toggle | 2 | ✅ Done |
+
+**Total Sprint 4 Points: 7** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- React Context API — global theme state management
+- localStorage — persistent theme preference
+- `window.matchMedia` — system color scheme detection
+- Tailwind CSS dark mode — `.dark` class overrides
+- Monaco Editor — dynamic theme switching
+- Mounted state pattern — hydration error prevention
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇
