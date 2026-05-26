@@ -1,0 +1,77 @@
+## 📋 Daily Progress Report — Day 18
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 18
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 18 — Streaming Response UI
+**Epic:** epic-4 frontend | **Priority:** High | **Points:** 2 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built the streaming response UI for the AI Code Mentor chat interface. The goal was to make AI responses appear token by token in real time instead of waiting for the full response, giving users a much more engaging and responsive experience.
+
+**StreamingMessage Component** — I created `frontend/app/components/StreamingMessage.tsx` which handles the visual display of a streaming AI response. It shows an animated blinking cursor while the AI is generating text by toggling the cursor opacity every 500 milliseconds using `setInterval`. When streaming is complete the cursor disappears and a Copy button appears so the user can copy the full response. A red Stop generating button is shown during streaming which allows the user to cancel the request at any time.
+
+**MarkdownRenderer Component** — I created `frontend/app/components/MarkdownRenderer.tsx` which parses and renders markdown formatting from the AI response. It handles triple backtick code blocks with language labels and green monospace text on a dark background, single backtick inline code with yellow highlighted text, headings with `#`, `##`, and `###` prefix, bullet lists with `-` or `*` prefix, numbered lists, bold text wrapped in `**`, and regular paragraphs. This makes AI responses much more readable especially when they contain code examples.
+
+**ChatWindow Streaming Update** — I updated `frontend/app/components/ChatWindow.tsx` to use the streaming endpoint `POST /api/chat/stream` instead of the regular chat endpoint. The component now uses the browser's `ReadableStream` API to read the Server-Sent Events response chunk by chunk. Each chunk is decoded and parsed to extract the text tokens which are appended to the streaming content state in real time. When the stream sends `[DONE]` the full message is added to the conversation history and the streaming state is cleared.
+
+**AbortController Integration** — I added an `AbortController` reference to the ChatWindow component. When the user clicks Stop generating the controller aborts the fetch request which immediately stops the stream. The content received so far is saved as a complete message so the user does not lose what was already generated.
+
+**SSE Parsing** — The streaming response uses Server-Sent Events format where each chunk starts with `data: ` followed by a JSON object containing the text token. The component splits each chunk by newlines, filters for lines starting with `data: `, strips the prefix, and parses the JSON to extract the text. This is the same pattern used by OpenAI and Anthropic streaming APIs.
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000/chat` and confirmed:
+- ✅ Sidebar showing Chat as active route
+- ✅ AI welcome message with avatar and timestamp
+- ✅ AI Code Mentor — Senior Developer Mode header
+- ✅ New Conversation button working
+- ✅ Input box and send button visible
+- ✅ StreamingMessage component integrated
+- ✅ MarkdownRenderer rendering correctly
+
+---
+
+### What I Learned
+- How Server-Sent Events (SSE) work for real-time streaming
+- How to use the browser ReadableStream API to read chunks
+- How to implement AbortController to cancel fetch requests
+- How to build a markdown parser from scratch in React
+- How to create an animated blinking cursor with setInterval
+- How streaming APIs differ from regular REST endpoints
+
+---
+
+## 🏆 Sprint 4 Overall Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 17 | Responsive Sidebar Navigation | 3 | ✅ Done |
+| Story 18 | Streaming Response UI | 2 | ✅ Done |
+
+**Total Sprint 4 Points: 5** 🎉
+
+---
+
+## 🛠️ Technologies Used Today
+- Server-Sent Events (SSE) — real-time token streaming
+- ReadableStream API — chunk-by-chunk response reading
+- AbortController — cancelling fetch requests
+- setInterval — animated blinking cursor
+- Custom markdown parser — code blocks, bold, lists
+- React hooks (useState, useRef, useEffect) — state management
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

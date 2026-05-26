@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from '../context/ThemeContext';
 
 interface NavItem {
   href: string;
@@ -24,6 +25,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const { resolvedTheme, toggleTheme } = useTheme();
 
   return (
     <>
@@ -85,17 +87,38 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           })}
         </nav>
 
-        {/* Bottom Info */}
-        <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t border-gray-700">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold">
-              M
-            </div>
-            <div>
-              <p className="text-white text-sm font-medium">Mariz</p>
-              <p className="text-gray-400 text-xs">Developer</p>
+        {/* Bottom Section */}
+        <div className="absolute bottom-0 left-0 right-0 border-t border-gray-700">
+
+          {/* Theme Toggle */}
+          <div className="px-3 pt-3">
+            <button
+              onClick={toggleTheme}
+              className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+            >
+              <span className="flex items-center gap-2">
+                {resolvedTheme === 'dark' ? '☀️' : '🌙'}
+                {resolvedTheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              </span>
+              <span className={`w-8 h-4 rounded-full transition-colors ${resolvedTheme === 'dark' ? 'bg-indigo-600' : 'bg-gray-600'}`}>
+                <span className={`block w-3 h-3 bg-white rounded-full mt-0.5 transition-transform ${resolvedTheme === 'dark' ? 'translate-x-4' : 'translate-x-0.5'}`} />
+              </span>
+            </button>
+          </div>
+
+          {/* Profile */}
+          <div className="px-6 py-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold">
+                M
+              </div>
+              <div>
+                <p className="text-white text-sm font-medium">Mariz</p>
+                <p className="text-gray-400 text-xs">Developer</p>
+              </div>
             </div>
           </div>
+
         </div>
       </aside>
     </>

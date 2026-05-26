@@ -1,5 +1,5 @@
 'use client';
-
+import { useTheme } from '../context/ThemeContext';
 import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import LanguageSelector from './LanguageSelector';
@@ -27,6 +27,7 @@ const MONACO_LANGUAGE_MAP: Record<string, string> = {
 };
 
 export default function CodeEditor() {
+  const { resolvedTheme } = useTheme();
   const [code, setCode] = useState('# Paste your code here...');
   const [language, setLanguage] = useState('auto');
   const [detectedLanguage, setDetectedLanguage] = useState('');
@@ -190,7 +191,7 @@ export default function CodeEditor() {
           language={monacoLang}
           value={code}
           onChange={handleCodeChange}
-          theme="vs-dark"
+          theme={resolvedTheme === 'dark' ? 'vs-dark' : 'light'}
           options={{
             fontSize: 14,
             minimap: { enabled: false },
