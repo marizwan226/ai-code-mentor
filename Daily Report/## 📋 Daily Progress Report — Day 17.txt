@@ -1,0 +1,87 @@
+## 📋 Daily Progress Report — Day 17
+
+---
+
+### 👤 Developer: Mariz
+### 📅 Date: Day 17
+### 🚀 Project: AI Code Mentor
+
+---
+
+## Story 17 — Responsive Sidebar Navigation
+**Epic:** epic-4 frontend | **Priority:** High | **Points:** 3 | **Estimate:** 1 day
+
+---
+
+### What I Did
+
+Today I built a fully responsive sidebar navigation system for the AI Code Mentor application. The goal was to replace the simple top navbar with a professional sidebar that shows all app sections and works on both desktop and mobile devices.
+
+**Sidebar Component** — I created `frontend/app/components/Sidebar.tsx` which is a dark-themed sidebar navigation panel. It shows the AI Code Mentor logo with a robot emoji at the top, followed by five navigation items — Dashboard, Chat, Code Review, History, and Settings — each with their own emoji icon. The active route is automatically detected using Next.js `usePathname` hook and highlighted with an indigo background and a white dot indicator. At the bottom of the sidebar there is a user profile section showing the name Mariz and the role Developer.
+
+**MobileHeader Component** — I created `frontend/app/components/MobileHeader.tsx` which is a fixed top header that only appears on mobile screens. It contains a hamburger menu button (three horizontal lines) that opens the sidebar when clicked, and the app name with the robot emoji. On desktop screens this header is hidden using the `lg:hidden` Tailwind class.
+
+**AppLayout Component** — I created `frontend/app/components/AppLayout.tsx` which is the main layout wrapper that combines the Sidebar and MobileHeader. It manages the `sidebarOpen` state and passes it down to both components. On mobile the sidebar slides in from the left with a smooth transition and a dark overlay appears behind it. Clicking the overlay closes the sidebar. On desktop the sidebar is always visible as a fixed left panel.
+
+**Mobile Overlay** — When the sidebar is open on mobile a semi-transparent black overlay covers the main content area. Clicking anywhere on the overlay closes the sidebar. This is the standard mobile drawer pattern used in apps like Gmail and Slack.
+
+**Root Layout Update** — I updated `app/layout.tsx` to import and wrap all pages with `AppLayout`. I also updated the page title to "AI Code Mentor" and added a proper description. This means every page automatically gets the sidebar without needing to add it individually.
+
+**Settings Page** — I created `frontend/app/settings/page.tsx` as a new settings page with options for Theme, Language, Session History limit, and a Version indicator showing the app is up to date.
+
+**Old Layout Cleanup** — I updated the old `components/Layout.tsx` to simply return its children without any wrapper so pages that still import it don't show the old navigation bar anymore.
+
+---
+
+### Challenges Faced & How I Solved Them
+
+| Challenge | Solution |
+|---|---|
+| `AppLayout.tsx` had wrong content | Rewrote file using terminal `cat` command |
+| Old navbar still showing on top | Replaced `Layout.tsx` content to just return children |
+| Hydration error from server/client mismatch | Cleared `.next` cache folder and restarted |
+| Module not found error | Fixed by rewriting `AppLayout.tsx` with correct content |
+
+---
+
+### Live Test Results
+
+Visited `http://localhost:3000` and confirmed:
+- ✅ Dark sidebar visible on the left
+- ✅ Dashboard highlighted in indigo as active route
+- ✅ Chat, Code Review, History, Settings all visible
+- ✅ Mariz / Developer profile at bottom of sidebar
+- ✅ Old top navbar removed successfully
+- ✅ Main content area clean and full height
+
+---
+
+### What I Learned
+- How to build a responsive sidebar with Tailwind CSS
+- How to use Next.js `usePathname` for active route detection
+- How to implement a mobile drawer with overlay
+- How to manage layout state with `useState` in React
+- How `app/layout.tsx` wraps all pages in Next.js App Router
+- How clearing `.next` cache fixes hydration errors
+
+---
+
+## 🏆 Sprint 4 Progress
+
+| Story | Description | Points | Status |
+|---|---|---|---|
+| Story 17 | Responsive Sidebar Navigation | 3 | ✅ Done |
+
+---
+
+## 🛠️ Technologies Used Today
+- Next.js `usePathname` — active route detection
+- Tailwind CSS — responsive sidebar and mobile overlay
+- React `useState` — sidebar open/close state
+- Next.js App Router — root layout wrapping all pages
+- CSS transitions — smooth sidebar slide animation
+- Git & GitHub — version control
+
+---
+
+Copy this and share it with your trainer! Ready for the next story? 👇

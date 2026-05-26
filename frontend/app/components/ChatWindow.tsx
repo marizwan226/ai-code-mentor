@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import MessageBubble from './MessageBubble';
+import StreamingMessage from './StreamingMessage';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -24,16 +25,16 @@ export default function ChatWindow() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState('');
-  const [streamingMessage, setStreamingMessage] = useState('');
+  const [streamingContent, setStreamingContent] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Auto scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, streamingMessage]);
+  }, [messages, streamingContent]);
 
-  // Auto resize textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -42,6 +43,7 @@ export default function ChatWindow() {
   }, [input]);
 
   const handleNewConversation = () => {
+    handleStop();
     setMessages([{
       role: 'assistant',
       content: 'New conversation started! How can I help you with your code today?',
@@ -49,7 +51,25 @@ export default function ChatWindow() {
     }]);
     setSessionId('');
     setInput('');
-    setStreamingMessage('');
+    setStreamingContent('');
+    setIsStreaming(false);
+  };
+
+  const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    if (streamingContent) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: streamingContent,
+        timestamp: getTimestamp()
+      }]);
+    }
+    setStreamingContent('');
+    setIsStreaming(false);
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -64,10 +84,13 @@ export default function ChatWindow() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setLoading(true);
-    setStreamingMessage('');
+    setStreamingContent('');
+    setIsStreaming(false);
+
+    abortControllerRef.current = new AbortController();
 
     try {
-      const res = await fetch('http://localhost:5000/api/chat', {
+      const res = await fetch('http://localhost:5000/api/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,7 +99,8 @@ export default function ChatWindow() {
             content: m.content
           })),
           sessionId: sessionId || undefined
-        })
+        }),
+        signal: abortControllerRef.current.signal
       });
 
       if (res.status === 429) {
@@ -97,15 +121,52 @@ export default function ChatWindow() {
         return;
       }
 
-      const data = await res.json();
-      setSessionId(data.sessionId);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: data.response,
-        timestamp: getTimestamp()
-      }]);
+      // Handle SSE streaming
+      setIsStreaming(true);
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let fullContent = '';
 
-    } catch {
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') {
+                setMessages(prev => [...prev, {
+                  role: 'assistant',
+                  content: fullContent,
+                  timestamp: getTimestamp()
+                }]);
+                setStreamingContent('');
+                setIsStreaming(false);
+                return;
+              }
+              try {
+                const parsed = JSON.parse(data);
+                if (parsed.text) {
+                  fullContent += parsed.text;
+                  setStreamingContent(fullContent);
+                }
+                if (parsed.sessionId) {
+                  setSessionId(parsed.sessionId);
+                }
+              } catch {
+                // Skip malformed chunks
+              }
+            }
+          }
+        }
+      }
+
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') return;
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: '❌ Failed to connect to the server. Make sure the backend is running.',
@@ -113,7 +174,7 @@ export default function ChatWindow() {
       }]);
     } finally {
       setLoading(false);
-      setStreamingMessage('');
+      setIsStreaming(false);
     }
   };
 
@@ -149,17 +210,23 @@ export default function ChatWindow() {
         ))}
 
         {/* Streaming message */}
-        {streamingMessage && (
-          <MessageBubble
-            message={{
-              role: 'assistant',
-              content: streamingMessage + '▌'
-            }}
-          />
+        {(isStreaming || streamingContent) && (
+          <div className="flex justify-start mb-4">
+            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold mr-2 flex-shrink-0 mt-1">
+              AI
+            </div>
+            <div className="bg-gray-800 border border-gray-700 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[75%]">
+              <StreamingMessage
+                content={streamingContent}
+                isStreaming={isStreaming}
+                onStop={handleStop}
+              />
+            </div>
+          </div>
         )}
 
-        {/* Loading indicator */}
-        {loading && !streamingMessage && (
+        {/* Loading dots */}
+        {loading && !isStreaming && !streamingContent && (
           <div className="flex justify-start mb-4">
             <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold mr-2">
               AI
