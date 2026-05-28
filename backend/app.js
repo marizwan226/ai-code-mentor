@@ -12,7 +12,7 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://ai-code-mentor.vercel.app',
+    'https://ai-code-mentor-rose.vercel.app',
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true
@@ -41,6 +41,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     environment: process.env.NODE_ENV || 'development',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
     timestamp: new Date().toISOString()
   });
 });
@@ -49,25 +50,27 @@ app.get('/health', (req, res) => {
 const errorHandler = require('./middleware/errorHandler');
 app.use(errorHandler);
 
-// MongoDB Memory Server Connection
+// Database Connection
 async function startServer() {
   try {
-    const mongod = await MongoMemoryServer.create();
-    const uri = mongod.getUri();
-    await mongoose.connect(uri);
-    console.log('MongoDB Memory Server connected');
+    if (process.env.MONGODB_URI) {
+      await mongoose.connect(process.env.MONGODB_URI);
+      console.log('MongoDB Atlas connected');
+    } else {
+      const mongod = await MongoMemoryServer.create();
+      const uri = mongod.getUri();
+      await mongoose.connect(uri);
+      console.log('MongoDB Memory Server connected');
+      process.on('SIGINT', async () => {
+        await mongoose.disconnect();
+        await mongod.stop();
+        process.exit(0);
+      });
+    }
 
     const PORT = process.env.PORT || 5000;
-    const server = app.listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
-    });
-
-    // Keep process alive
-    process.on('SIGINT', async () => {
-      await mongoose.disconnect();
-      await mongod.stop();
-      server.close();
-      process.exit(0);
     });
 
   } catch (error) {
