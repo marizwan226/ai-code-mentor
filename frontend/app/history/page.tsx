@@ -47,7 +47,7 @@ export default function History() {
 
   const fetchSessions = async () => {
     try {
-      const res = await fetch('${API_URL}/api/sessions');
+      const res = await fetch(`${API_URL}/api/sessions`);
       const data = await res.json();
       setSessions(data.sessions || []);
     } catch {

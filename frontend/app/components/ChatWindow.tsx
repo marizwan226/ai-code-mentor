@@ -91,7 +91,7 @@ export default function ChatWindow() {
     abortControllerRef.current = new AbortController();
 
     try {
-      const res = await fetch('${API_URL}/api/chat/stream', {
+      const res = await fetch(`${API_URL}/api/chat/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
