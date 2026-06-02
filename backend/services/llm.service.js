@@ -17,7 +17,7 @@ const getChatResponse = async (messages) => {
 
   try {
     const response = await client.messages.create({
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'anthropic/claude-3-haiku',
       max_tokens: 1024,
       system: SYSTEM_PROMPT_V2,
       messages: messages
@@ -44,7 +44,7 @@ const getChatResponseStream = async (messages, res) => {
 
   try {
     const stream = await client.messages.stream({
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'anthropic/claude-3-haiku',
       max_tokens: 1024,
       system: SYSTEM_PROMPT_V2,
       messages: messages
