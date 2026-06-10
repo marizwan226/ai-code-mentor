@@ -2,7 +2,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const { SYSTEM_PROMPT_V2 } = require('../config/systemPrompt');
 
 const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+  apiKey: process.env.API_KEY,
   baseURL: 'https://openrouter.ai/api/v1',
   defaultHeaders: {
     'HTTP-Referer': 'http://localhost:3000',
